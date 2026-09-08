@@ -1,0 +1,35 @@
+# Project exclude paths
+/.dart_tool/
+/android/.gradle/
+/build/
+/build/app/intermediates/javac/debug/compileDebugJavaWithJavac/classes/
+/build/cloud_firestore/intermediates/javac/debug/compileDebugJavaWithJavac/classes/
+/build/cloud_functions/intermediates/javac/debug/compileDebugJavaWithJavac/classes/
+/build/connectivity_plus/intermediates/javac/debug/compileDebugJavaWithJavac/classes/
+/build/firebase_analytics/intermediates/javac/debug/compileDebugJavaWithJavac/classes/
+/build/firebase_auth/intermediates/javac/debug/compileDebugJavaWithJavac/classes/
+/build/firebase_core/intermediates/javac/debug/compileDebugJavaWithJavac/classes/
+/build/firebase_crashlytics/intermediates/javac/debug/compileDebugJavaWithJavac/classes/
+/build/firebase_messaging/intermediates/javac/debug/compileDebugJavaWithJavac/classes/
+/build/flutter_local_notifications/intermediates/javac/debug/compileDebugJavaWithJavac/classes/
+/build/flutter_pdfview/intermediates/javac/debug/compileDebugJavaWithJavac/classes/
+/build/flutter_plugin_android_lifecycle/intermediates/javac/debug/compileDebugJavaWithJavac/classes/
+/build/google_sign_in_android/intermediates/javac/debug/compileDebugJavaWithJavac/classes/
+/build/image_picker_android/intermediates/javac/debug/compileDebugJavaWithJavac/classes/
+/build/jni/intermediates/javac/debug/compileDebugJavaWithJavac/classes/
+/build/jni_flutter/intermediates/javac/debug/compileDebugJavaWithJavac/classes/
+/build/local_auth_android/intermediates/javac/debug/compileDebugJavaWithJavac/classes/
+/build/printing/intermediates/javac/debug/compileDebugJavaWithJavac/classes/
+/build/url_launcher_android/intermediates/javac/debug/compileDebugJavaWithJavac/classes/
+*.zip
+# Server secrets
+.env
+firebase-service-account.json
+
+# Environment files
+
+*.env
+*.env.example
+# Firebase service account credentials
+**/firebase-service-account.json
+server/firebase-service-account.json

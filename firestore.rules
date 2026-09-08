@@ -1,0 +1,78 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Admin access is controlled only by Firebase Authentication email.
+    // Regular users cannot promote themselves by changing their profile.
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'admin@bookverse.com' ||
+        request.auth.token.email == 'meethanishihaam24@gmail.com'
+      );
+    }
+
+    // Users profile: signed in users can view profiles (needed for Manage Users list),
+    // owners and admins can update.
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create, update: if isOwner(userId) || isAdmin();
+      allow delete: if isAdmin();
+
+      match /wishlist/{bookId} {
+        allow read, write: if isOwner(userId) || isAdmin();
+      }
+
+      // NOTE: the app actually writes wishlist items to a subcollection
+      // named "wishlists" (see AppConstants.wishlistCollection), not
+      // "wishlist" above. Both rules are kept so existing data under either
+      // name stays protected; rename the constant to "wishlist" (singular)
+      // to remove this duplication.
+      match /wishlists/{bookId} {
+        allow read, write: if isOwner(userId) || isAdmin();
+      }
+    }
+
+    // Book catalog is publicly readable; authenticated users/admins can write.
+    match /books/{bookId} {
+      allow read: if true;
+      allow create, update, delete: if isSignedIn();
+    }
+
+    // Reviews: readable by all, authenticated users can write/like.
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create, update: if isSignedIn();
+      allow delete: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+    }
+
+    // Orders: a signed-in user can create their own order, and can only
+    // read/update an order that belongs to them (or is an admin). Previously
+    // this allowed any signed-in user to read or update ANY order document.
+    match /orders/{orderId} {
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow read, update: if isOwner(resource.data.userId) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Coupons are readable by anyone, writable by authenticated users.
+    match /coupons/{code} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    // Default fallback for any other collection
+    match /{document=**} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+  }
+}
