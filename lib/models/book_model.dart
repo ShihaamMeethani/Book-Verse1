@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+/// Represents a book and the information displayed throughout the app.
 class Book {
   final String id;
   final String title;
@@ -20,7 +21,7 @@ class Book {
   final String language;
   final String isbn;
   final int soldCount;
-  final String? previewUrl; // sample pages / PDF
+  final String? previewUrl; // Sample pages / PDF.
 
   Book({
     required this.id,
@@ -45,6 +46,7 @@ class Book {
     this.previewUrl,
   });
 
+  // These getters keep price, discount, and stock logic in one place.
   double get effectivePrice => discountPrice ?? price;
   bool get hasDiscount => discountPrice != null && discountPrice! < price;
   int get discountPercent =>
@@ -52,6 +54,7 @@ class Book {
   bool get inStock => stock > 0;
 
   factory Book.fromMap(Map<String, dynamic> map, String id) {
+    // Convert Firestore data into a strongly typed Book object.
     return Book(
       id: id,
       title: map['title'] ?? '',
@@ -79,6 +82,7 @@ class Book {
   }
 
   Map<String, dynamic> toMap() {
+    // Convert the Book object back into a Firestore-compatible map.
     return {
       'title': title,
       'author': author,
